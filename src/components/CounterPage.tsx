@@ -1,12 +1,14 @@
 // app/components/counter.tsx
 "use client";
+import { useEffect, useState } from "react";
 import {
   useAccount,
   useReadContract,
   useWriteContract,
   useWaitForTransactionReceipt,
 } from "wagmi";
-import ConnectWallet from "@/app/components/ConnectWallet";
+import ConnectWallet from "@/components/ConnectWallet";
+// import { Button } from "@/components/ui/button";
 // import { W3mConnectButton } from '@web3modal/wagmi'
 
 // 替换为你部署的 Counter 合约地址
@@ -46,7 +48,7 @@ export default function CounterPage() {
   const {
     writeContract,
     data: incrementHash, // 交易哈希
-    isPending: isIncrementPending,
+    isPending: isIncrementPending    
   } = useWriteContract();
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } =
@@ -59,6 +61,7 @@ export default function CounterPage() {
     data: currentCount,
     isError: isReadError,
     isLoading: isCountLoading,
+    refetch: refetchCount,
   } = useReadContract({
     address: COUNTER_ADDRESS,
     abi: counterAbi,
@@ -74,15 +77,24 @@ export default function CounterPage() {
     });
   }
 
+  useEffect(() => {
+    if (isConfirmed) {
+      refetchCount();
+    }
+  }, [isConfirmed]);
+
   return (
     <>
       <ConnectWallet />
+      {/* <div>
+        <Button variant="outline">Click me</Button>
+      </div> */}
       {isConnected && (
-        <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-lg">
+        <div className=" max-w-1/2 mx-auto mt-10 p-6 border rounded-lg shadow-lg">
           <div className="text-center mb-6">
-            <p className="text-lg">当前计数</p>
+            <p className="text-lg">currentCount</p>
             <p className="text-3xl font-mono my-3">
-              {isCountLoading ? "加载中..." : currentCount?.toString() ?? "--"}
+              {isCountLoading ? "loading..." : currentCount?.toString() ?? "--"}
             </p>
           </div>
 
@@ -93,20 +105,20 @@ export default function CounterPage() {
               className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 hover:bg-blue-600 transition-colors"
             >
               {isIncrementPending
-                ? "确认中..."
+                ? "confirm..."
                 : isConfirming
-                ? "处理中.."
-                : "增加计数"}
+                ? "confirming..."
+                : "increment"}
             </button>
 
-            <div> {isConfirmed && <div>增加计数成功！</div>}</div>
+            {/* <div> {isConfirmed && <div>increment success！</div>}</div>  */}
           </div>
 
           {isReadError && (
-            <p className="text-red-500 text-center mt-4">读取数据失败</p>
+            <p className="text-red-500 text-center mt-4">read count failed</p>
           )}
 
-          <div> {incrementHash && <div>交易哈希: {incrementHash}</div>}</div>
+          <div> {incrementHash && <div>transaction hash: {incrementHash}</div>}</div>
 
           {/* {isWriteError && (
         <p className="text-red-500 text-center mt-4">
