@@ -17,7 +17,7 @@ export default function ConnectWallet() {
 
   return (
     <div className="border border-gray-200 p-4 flex justify-center ">
-      {isConnected && (
+      {isConnected ? (
         <div>
           <h2 className="text-lg font-bold mb-2">Wallet Information</h2>
           <div>
@@ -52,8 +52,7 @@ export default function ConnectWallet() {
             Disconnect
           </button>
         </div>
-      )}
-      {!isConnected && (
+      ) : (
         <div className="flex flex-col items-center">
           <p className="text-sm text-gray-800 text-center">
             Please connect your wallet to continue.
@@ -68,56 +67,4 @@ export default function ConnectWallet() {
       )}
     </div>
   );
-
-  //     return (
-  //       <div>
-  //         { isConnected && (
-  //           <div className="border border-gray-200 p-4 flex justify-center ">
-  //           <div>
-  //             <h2 className="text-lg font-bold mb-2">Wallet Information</h2>
-  //             <div>
-  //               <p className="text-sm text-gray-800">
-  //                 Status: <span className=" text-lg text-green-500">{status}</span>
-  //               </p>
-  //             </div>
-  //             <div>
-  //               <p className="text-sm text-gray-800">
-  //                 Chain:{" "}
-  //                 <span className="text-lg">{chain?.name ?? "Unknown"}</span>
-  //               </p>
-  //             </div>
-  //             <div>
-  //               <p className="text-sm text-gray-800">
-  //                 Address: <span className="text-lg break-all">{address}</span>
-  //               </p>
-  //             </div>
-  //             <div>
-  //               <p className="text-sm text-gray-800">
-  //                 Balance:{" "}
-  //                 <span className=" text-lg">
-  //                   {balance?.formatted
-  //                     ? `${balance.formatted} ${balance.symbol}`
-  //                     : "Loading..."}
-  //                 </span>
-  //               </p>
-  //             </div>
-  //             <button
-  //               onClick={() => disconnect()}
-  //               className="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-  //             >
-  //               Disconnect
-  //             </button>
-  //           </div>
-  //         </div>
-  // }
-
-  //          {!isConnected && (
-  //           <button
-  //             className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-  //             onClick={() => connect({ connector: injected() })}
-  //           >
-  //             Connect Wallet
-  //           </button>
-  //       </div>
-  //     );
 }

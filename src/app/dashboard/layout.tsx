@@ -1,7 +1,8 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export default function DashboardLayout({
   children,
@@ -17,12 +18,25 @@ export default function DashboardLayout({
   // 导航栏Link根据 url高亮
   const activeClassName = "text-[#0080ff]";
 
+  const [menus, setMenu] = useState([
+    { url: "/dashboard", name: "wallet" },
+    { url: "/dashboard/myToken", name: "myToken" },
+    { url: "/dashboard/material", name: "Material UI" },
+    { url: "/dashboard/zustand", name: "zustand" },
+  ]);
+
   return (
     <div className="">
       <div className="flex justify-start items-center gap-6 mb-1 border-b border-gray-200 px-4 py-2">
-        <Link className={isActive("/dashboard") ? activeClassName : ""} href="/dashboard">wallet</Link>
-        <Link className={isActive("/dashboard/myToken") ? activeClassName : ""} href="/dashboard/myToken">MyToken</Link>
-        <Link className={isActive("/dashboard/about") ? activeClassName : ""} href="/dashboard/about">Material</Link>
+        {menus.map((menu) => (
+          <Link
+            key={menu.name}
+            className={isActive(menu.url) ? activeClassName : ""}
+            href={menu.url}
+          >
+            {menu.name}
+          </Link>
+        ))}
       </div>
       {children}
     </div>
